@@ -12,12 +12,20 @@ import LoadingComponent from './components/LoadingComponent';
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
 
+function DrawerNavigator() {
+  return (
+    <Drawer.Navigator drawerContent={props => <CustomDrawer {...props} />}>
+      <Drawer.Screen name="Pokedex" component={FeedScreen} />
+    </Drawer.Navigator>
+  );
+}
+
 function MainStack() {
   return (
-    <>
+    <Stack.Navigator>
       <Stack.Screen
-        name="Feed"
-        component={FeedScreen}
+        name="Drawer"
+        component={DrawerNavigator}
         options={{headerShown: false}}
       />
       <Stack.Screen
@@ -25,15 +33,7 @@ function MainStack() {
         component={DetailsScreen}
         options={{headerShown: false}}
       />
-    </>
-  );
-}
-
-function DrawerNavigator() {
-  return (
-    <Drawer.Navigator drawerContent={props => <CustomDrawer {...props} />}>
-      <Drawer.Screen name="Pokedex" component={MainStack} />
-    </Drawer.Navigator>
+    </Stack.Navigator>
   );
 }
 
@@ -50,7 +50,7 @@ function Router() {
     try {
       let userData = await AsyncStorage.getItem('@token');
       if (userData) {
-        setInitialRouteName('Feed');
+        setInitialRouteName('Main');
       } else {
         setInitialRouteName('Login');
       }
@@ -71,8 +71,8 @@ function Router() {
             options={{headerShown: false}}
           />
           <Stack.Screen
-            name="Feed"
-            component={DrawerNavigator}
+            name="Main"
+            component={MainStack}
             options={{headerShown: false}}
           />
         </Stack.Navigator>
