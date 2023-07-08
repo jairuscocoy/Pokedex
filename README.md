@@ -45,7 +45,7 @@ password: ash123
 
 <img src="https://github.com/jairuscocoy/Pokedex/assets/36788124/3dbe0daf-4853-4ca0-bdc5-e5de19cb3ade" alt="Screenshot" width="180" height="400"> 
 
-<h5>Details Screen(Description tab)</h5
+<h5>Details Screen(Description tab)</h5>
                                      
 <img src="https://github.com/jairuscocoy/Pokedex/assets/36788124/74025b52-e1ff-43af-8318-314041822734" alt="Screenshot" width="180" height="400"> 
 
