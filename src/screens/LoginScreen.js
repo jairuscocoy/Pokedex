@@ -55,7 +55,7 @@ const LoginScreen = ({navigation}) => {
         try {
           await AsyncStorage.setItem('@token', username);
           setLoading(false);
-          navigation.navigate('Feed');
+          navigation.navigate('Main');
         } catch (e) {
           setLoading(false);
           alert(e);
