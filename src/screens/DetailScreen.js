@@ -156,7 +156,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 30,
     height: height * 0.5,
-    // paddingTop: height * 0.07,
   },
 
   upperContainer1: {

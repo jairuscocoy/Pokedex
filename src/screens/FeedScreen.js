@@ -5,7 +5,7 @@ import {
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
-import React, {useEffect, useState, useRef, useCallback} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchPokemon} from '../store/reducers/fetchPokemon';
 import {fetchMorePokemon} from '../store/reducers/fetchMorePokemon';
@@ -13,8 +13,6 @@ import LoadingComponent from '../components/LoadingComponent';
 import ItemRendered from '../components/ItemRendered';
 const Feed = () => {
   const [offset, setOffset] = useState(0);
-  const flatListRef = useRef(null);
-  const [scrollOffset, setScrollOffset] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const dispatch = useDispatch();
   const {pokemonList, isLoading, isLoadingMore, error} = useSelector(
@@ -60,14 +58,9 @@ const Feed = () => {
     }
   };
 
-  const handleScroll = event => {
-    setScrollOffset(event.nativeEvent.contentOffset.y);
-  };
-
   const handleListRefresh = () => {
     setIsRefreshing(true);
     dispatch(fetchPokemon(0));
-    // }
   };
 
   return (
@@ -78,8 +71,6 @@ const Feed = () => {
         keyExtractor={item => item}
         onEndReached={loadMorePokemon}
         onEndReachedThreshold={0.1}
-        // onScroll={handleScroll}
-        // scrollOffset={scrollOffset}
         refreshControl={<RefreshControl onRefresh={handleListRefresh} />}
         ListFooterComponent={renderFooter}
       />

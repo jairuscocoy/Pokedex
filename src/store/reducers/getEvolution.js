@@ -12,20 +12,15 @@ export const getEvolution = createAsyncThunk(
       const speciesData = response.data;
       const evolutionChainURL = speciesData.evolution_chain.url;
 
-      // Fetch evolution chain
       const evolutionChainResponse = await axios.get(evolutionChainURL);
       const evolutionChainData = evolutionChainResponse.data;
 
       const evolutions = [];
-      // Function to traverse the evolution chain recursively
+
       const traverseEvolutionChain = chain => {
-        // alert(
-        //   JSON.stringify(chain.evolves_to[0].evolution_details[0].min_level),
-        // );
         const species = chain.species.name;
         const pokemonId = getPokemonId(chain.species.url);
         const spriteURL = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonId}.png`;
-        // const level = chain.evolves_to[0].evolution_details[0].min_level;
         const level = getEvolutionLevel(chain);
 
         evolutions.push({
@@ -41,7 +36,6 @@ export const getEvolution = createAsyncThunk(
         }
       };
 
-      // Function to get the evolution level from the evolution details array
       const getEvolutionLevel = chain => {
         if (chain.evolution_details && chain.evolution_details.length > 0) {
           const evolutionDetail = chain.evolution_details[0];
@@ -52,9 +46,7 @@ export const getEvolution = createAsyncThunk(
         return 0;
       };
 
-      // Start traversing the evolution chain from the initial species
       traverseEvolutionChain(evolutionChainData.chain);
-      //   alert(JSON.stringify(evolutions));
       return evolutions;
     } catch (err) {
       alert('Error: Something went wrong' + err);
@@ -62,7 +54,6 @@ export const getEvolution = createAsyncThunk(
   },
 );
 
-// Function to extract the Pokemon ID from its species URL
 const getPokemonId = speciesURL => {
   const parts = speciesURL.split('/');
   const id = parts[parts.length - 2];

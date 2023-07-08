@@ -1,8 +1,5 @@
-import {View, Text} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {getEvolution} from '../store/reducers/getEvolution';
-import LoadingComponent from '../components/LoadingComponent';
+import {View} from 'react-native';
+import React from 'react';
 import InfoPerEvolution from './InfoPerEvolution';
 
 const EvolutionComponent = ({evolutionData}) => {
