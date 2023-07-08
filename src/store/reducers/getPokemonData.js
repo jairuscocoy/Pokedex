@@ -4,19 +4,29 @@ import axios from 'axios';
 export const getPokemonData = createAsyncThunk(
   'pokemonData/getPokemonData',
   async index => {
-    // alert(`INDEX: ${index}`);
     try {
       const response = await axios.get(
         `https://pokeapi.co/api/v2/pokemon/${index}`,
       );
-      // alert(JSON.stringify(response.data.stats));
       return response.data;
     } catch (err) {
-      alert('Error: Somethine went wrong' + err);
+      alert('Error: Something went wrong' + err);
     }
   },
 );
 
-// export const clearPokemonDetails = asyn()=>{
-//   return ''
-// }
+export const getPokemonDescriptions = createAsyncThunk(
+  'pokemonData/getPokemonDescriptions',
+  async index => {
+    try {
+      const response = await axios.get(
+        `https://pokeapi.co/api/v2/pokemon-species/${index}`,
+      );
+      const descriptions = response.data.flavor_text_entries[6].flavor_text;
+      return descriptions;
+    } catch (err) {
+      console.error('Error: Something went wrong', err);
+      throw err;
+    }
+  },
+);

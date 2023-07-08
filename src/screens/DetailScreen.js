@@ -13,22 +13,35 @@ import {useRoute} from '@react-navigation/native';
 import {ArrowLeftIcon} from 'react-native-heroicons/outline';
 
 import {useDispatch, useSelector} from 'react-redux';
-import {getPokemonData} from '../store/reducers/getPokemonData';
-import * as Progress from 'react-native-progress';
+import {
+  getPokemonData,
+  getPokemonDescriptions,
+} from '../store/reducers/getPokemonData';
+import {getEvolution} from '../store/reducers/getEvolution';
 import LoadingComponent from '../components/LoadingComponent';
+import BaseStatsComponent from '../components/BaseStatsComponent';
+import EvolutionComponent from '../components/EvolutionComponent';
+import DescriptionComponent from '../components/DescriptionComponent';
 
 const Article = ({navigation}) => {
   const route = useRoute();
   const dispatch = useDispatch();
+  const {pokemonData, pokemonDescription, evolutionData, isLoading, error} =
+    useSelector(state => state.pokemonData);
   const [statePokemonData, setStatePokemonData] = useState([]);
-  const {pokemonData, isLoading, error} = useSelector(
-    state => state.pokemonData,
-  );
+  const [activeTab, setActiveTab] = useState(1);
+
   const {name, types, index, imageUrl} = route.params;
   const backgroundColor = colors[types[0]] || colors.primary;
 
+  const handleTabPress = tabName => {
+    setActiveTab(tabName);
+  };
+
   useEffect(() => {
     dispatch(getPokemonData(index));
+    dispatch(getEvolution(index));
+    dispatch(getPokemonDescriptions(index));
   }, [dispatch]);
 
   useEffect(() => {
@@ -36,6 +49,29 @@ const Article = ({navigation}) => {
       setStatePokemonData(pokemonData);
     }
   }, [pokemonData]);
+
+  const renderTabContent = () => {
+    if (activeTab === 0) {
+      return (
+        <DescriptionComponent
+          description={pokemonDescription}
+          height={statePokemonData.height}
+          weight={statePokemonData.weight}
+          type={types[0]}
+        />
+      );
+    } else if (activeTab === 1) {
+      return (
+        <BaseStatsComponent
+          backgroundColor={backgroundColor}
+          statePokemonData={statePokemonData}
+        />
+      );
+    } else if (activeTab === 2) {
+      return <EvolutionComponent evolutionData={evolutionData} />;
+    }
+    return null;
+  };
 
   const TypeContainer = () => {
     return (
@@ -77,26 +113,29 @@ const Article = ({navigation}) => {
     );
   };
 
-  const BaseStatsComponent = () => {
-    return statePokemonData.stats?.map(stat => (
-      <View style={styles.BaseStatsContainer}>
-        <View style={styles.row} key={stat.stat.name}>
-          <Text style={styles.statName}>{stat.stat.name}</Text>
-          <Text style={styles.statScore}>{stat.base_stat}</Text>
-          <Progress.Bar
-            progress={stat.base_stat / 100}
-            width={200}
-            color={backgroundColor}
-            unfilledColor="#d4d4d4"
-            borderWidth={0}
-          />
-        </View>
-      </View>
-    ));
-  };
-
   const LowerContainer = () => {
-    return <View style={styles.lowerContainer}>{<BaseStatsComponent />}</View>;
+    return (
+      <View style={styles.lowerContainer}>
+        <View style={styles.tabBar}>
+          <TouchableOpacity
+            style={[styles.tab, activeTab === 0 && styles.activeTab]}
+            onPress={() => handleTabPress(0)}>
+            <Text style={styles.tabText}>Description</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tab, activeTab === 1 && styles.activeTab]}
+            onPress={() => handleTabPress(1)}>
+            <Text style={styles.tabText}>Base Stats</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tab, activeTab === 2 && styles.activeTab]}
+            onPress={() => handleTabPress(2)}>
+            <Text style={styles.tabText}>Evolution</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.tabContent}>{renderTabContent()}</View>
+      </View>
+    );
   };
   if (isLoading) {
     return <LoadingComponent />;
@@ -147,6 +186,7 @@ const styles = StyleSheet.create({
   lowerContainer: {
     flex: 1,
     height: height * 0.5,
+    backgroundColor: 'white',
   },
 
   image: {
@@ -157,30 +197,31 @@ const styles = StyleSheet.create({
     left: width * 0.24,
   },
 
-  //BaseStatcontainer
+  //tabbar
 
-  BaseStatsContainer: {
-    marginTop: 10,
-    paddingHorizontal: 16,
-  },
-  row: {
+  tabBar: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
+    justifyContent: 'space-around',
+    backgroundColor: '#f0f0f0',
+    paddingTop: 10,
   },
-  statName: {
+  tab: {
     flex: 1,
-    marginRight: 8,
-    textAlign: 'right',
-    textTransform: 'uppercase',
-    fontSize: width * 0.03,
-    fontWeight: '700',
-    color: '#808080',
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderBottomWidth: 2,
+    borderBottomColor: 'transparent',
   },
-  statScore: {
-    width: 40,
-    marginRight: 8,
-    textAlign: 'right',
+  activeTab: {
+    borderBottomColor: 'blue',
+  },
+  tabText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  tabContent: {
+    padding: 10,
   },
 });
 
