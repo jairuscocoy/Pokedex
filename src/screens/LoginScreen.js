@@ -7,7 +7,6 @@ import {
   Dimensions,
   Image,
   StatusBar,
-  TextInput,
   Keyboard,
 } from 'react-native';
 import React, {useState} from 'react';
@@ -50,7 +49,6 @@ const LoginScreen = ({navigation}) => {
   const login = () => {
     setLoading(true);
     if (username === 'ash' && password === 'ash123') {
-      // alert('enter!');
       setTimeout(async () => {
         try {
           await AsyncStorage.setItem('@token', username);

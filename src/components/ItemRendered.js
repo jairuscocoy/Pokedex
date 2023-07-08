@@ -1,7 +1,6 @@
 import {View, Text, Image, StyleSheet, Dimensions} from 'react-native';
 
 import React from 'react';
-import colors from '../assets/colors';
 import ItemContainer from './ItemContainer';
 import {useNavigation} from '@react-navigation/native';
 
@@ -21,7 +20,6 @@ const ItemRendered = ({index, name, types, imageUrl}) => {
   };
 
   const GoToDetails = index => {
-    // alert(index + 1);
     navigation.navigate('Details', {
       name: name,
       types: types,
@@ -48,7 +46,6 @@ const ItemRendered = ({index, name, types, imageUrl}) => {
 };
 
 const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   name: {
