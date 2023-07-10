@@ -6,50 +6,52 @@ import {
   Dimensions,
   TextInput,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {memo, useState} from 'react';
 import colors from '../assets/colors';
 
-const TextinputComponent = ({
-  value,
-  setValue,
-  placeholder,
-  errorMessage,
-  isSecure,
-  onFocus = () => {},
-}) => {
-  const [isFocused, setIsFocused] = useState(false);
-  return (
-    <>
-      <TextInput
-        onChangeText={text => setValue(text)}
-        value={value}
-        autoCapitalize="none"
-        style={[
-          styles.textinput,
-          {
-            borderColor: errorMessage
-              ? 'red'
-              : isFocused
-              ? colors.secondary
-              : null,
-            borderWidth: isFocused ? 2 : 0,
-          },
-        ]}
-        placeholder={placeholder}
-        secureTextEntry={isSecure}
-        onFocus={() => {
-          onFocus();
-          setIsFocused(true);
-        }}
-        onBlur={() => {
-          setIsFocused(false);
-        }}
-      />
+const TextinputComponent = memo(
+  ({
+    value,
+    setValue,
+    placeholder,
+    errorMessage,
+    isSecure,
+    onFocus = () => {},
+  }) => {
+    const [isFocused, setIsFocused] = useState(false);
+    return (
+      <>
+        <TextInput
+          onChangeText={text => setValue(text)}
+          value={value}
+          autoCapitalize="none"
+          style={[
+            styles.textinput,
+            {
+              borderColor: errorMessage
+                ? 'red'
+                : isFocused
+                ? colors.secondary
+                : null,
+              borderWidth: isFocused ? 2 : 0,
+            },
+          ]}
+          placeholder={placeholder}
+          secureTextEntry={isSecure}
+          onFocus={() => {
+            onFocus();
+            setIsFocused(true);
+          }}
+          onBlur={() => {
+            setIsFocused(false);
+          }}
+        />
 
-      <Text style={styles.error}>{errorMessage}</Text>
-    </>
-  );
-};
+        <Text style={styles.error}>{errorMessage}</Text>
+      </>
+    );
+  },
+);
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;

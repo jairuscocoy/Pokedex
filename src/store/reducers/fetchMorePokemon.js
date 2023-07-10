@@ -11,9 +11,11 @@ export const fetchMorePokemon = createAsyncThunk(
       const pokemonList = response.data.results;
 
       const pokemonPromises = pokemonList.map(async pokemon => {
+        const pokemonId = getPokemonId(pokemon.url);
         const pokemonResponse = await axios.get(pokemon.url);
         const pokemonData = pokemonResponse.data;
         return {
+          id: pokemonId,
           name: pokemonData.name,
           types: pokemonData.types.map(type => type.type.name),
           imageUrl: pokemonData.sprites.other['official-artwork'].front_default,
@@ -21,10 +23,15 @@ export const fetchMorePokemon = createAsyncThunk(
       });
 
       const pokemonDetails = await Promise.all(pokemonPromises);
-
       return pokemonDetails;
     } catch (error) {
       throw new Error('Failed to fetch Pokémon data.');
     }
   },
 );
+
+const getPokemonId = speciesURL => {
+  const parts = speciesURL.split('/');
+  const id = parts[parts.length - 2];
+  return id ? parseInt(id, 10) : null;
+};
