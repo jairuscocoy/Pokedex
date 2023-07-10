@@ -1,8 +1,8 @@
 import {View, Text, StyleSheet, Dimensions} from 'react-native';
-import React from 'react';
+import React, {memo} from 'react';
 import * as Progress from 'react-native-progress';
 
-const BaseStatsComponent = ({statePokemonData, backgroundColor}) => {
+const BaseStatsComponent = memo(({statePokemonData, backgroundColor}) => {
   return statePokemonData.stats?.map(stat => (
     <View style={styles.BaseStatsContainer}>
       <View style={styles.row} key={stat.stat.name}>
@@ -18,7 +18,7 @@ const BaseStatsComponent = ({statePokemonData, backgroundColor}) => {
       </View>
     </View>
   ));
-};
+});
 
 const width = Dimensions.get('window').width;
 

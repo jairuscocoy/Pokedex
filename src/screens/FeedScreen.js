@@ -5,7 +5,7 @@ import {
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchPokemon} from '../store/reducers/fetchPokemon';
 import {fetchMorePokemon} from '../store/reducers/fetchMorePokemon';
@@ -20,14 +20,17 @@ const Feed = () => {
   );
 
   useEffect(() => {
+    loadPokemon();
+  }, []);
+  const loadPokemon = useCallback(() => {
     dispatch(fetchPokemon(offset));
-  }, [dispatch]);
+  }, []);
 
-  const loadMorePokemon = () => {
+  const loadMorePokemon = useCallback(() => {
     const newOffset = offset + 10;
     setOffset(newOffset);
     dispatch(fetchMorePokemon(newOffset));
-  };
+  }, [offset]);
 
   useEffect(() => {
     setOffset(0);
@@ -41,10 +44,11 @@ const Feed = () => {
     return <Text>Error: {error}</Text>;
   }
 
-  const renderItem = ({item, index}) => (
+  const renderItem = ({item}) => (
     <ItemRendered
+      key={item.id}
       name={item.name}
-      index={index}
+      index={item.id}
       types={item.types}
       imageUrl={item.imageUrl}
     />

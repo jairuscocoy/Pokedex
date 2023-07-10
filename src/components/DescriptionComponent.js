@@ -1,8 +1,8 @@
 import {View, Text, StyleSheet} from 'react-native';
-import React from 'react';
+import React, {memo} from 'react';
 import colors from '../assets/colors';
 
-const DescriptionComponent = ({description, weight, height, type}) => {
+const DescriptionComponent = memo(({description, weight, height, type}) => {
   const borderColor = colors[type] || colors.primary;
   const color = colors[type] || colors.primary;
   return (
@@ -20,7 +20,7 @@ const DescriptionComponent = ({description, weight, height, type}) => {
       <Text style={styles.description}>{description}</Text>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {},

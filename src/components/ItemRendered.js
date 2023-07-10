@@ -1,10 +1,10 @@
 import {View, Text, Image, StyleSheet, Dimensions} from 'react-native';
 
-import React from 'react';
+import React, {memo} from 'react';
 import ItemContainer from './ItemContainer';
 import {useNavigation} from '@react-navigation/native';
 
-const ItemRendered = ({index, name, types, imageUrl}) => {
+const ItemRendered = memo(({index, name, types, imageUrl}) => {
   const navigation = useNavigation();
   const TypeComponent = () => {
     return (
@@ -23,7 +23,7 @@ const ItemRendered = ({index, name, types, imageUrl}) => {
     navigation.navigate('Details', {
       name: name,
       types: types,
-      index: index + 1,
+      index: index,
       imageUrl: imageUrl,
     });
   };
@@ -43,7 +43,7 @@ const ItemRendered = ({index, name, types, imageUrl}) => {
       </View>
     </ItemContainer>
   );
-};
+});
 
 const width = Dimensions.get('window').width;
 
